@@ -21,7 +21,8 @@ cask "yappyapp" do
         System Settings -> Privacy & Security and click "Open Anyway".
       macOS 14: right-click YappYapp in Applications and choose "Open".
 
-    To skip that prompt entirely, install with the no-quarantine flag:
-      brew install --cask --no-quarantine matd97/tap/yappyapp
+    To skip that prompt entirely, run this after installing
+    (recent Homebrew versions no longer offer a no-quarantine flag):
+      xattr -dr com.apple.quarantine /Applications/YappYapp.app
   EOS
 end
