@@ -1,6 +1,6 @@
 cask "yappyapp" do
   version "0.3.1"
-  sha256 "5c994d9282a7644c12acdd16a51f71a77622d97d97e7c34fef1e5f4a0a91eaf2"
+  sha256 "183902875c68b7c6fb629a68693600911392bb83bf4a28154260e3d84402ae9c"
 
   url "https://github.com/matd97/yappyapp-releases/releases/download/v#{version}/YappYapp-#{version}.dmg"
   name "YappYapp"
