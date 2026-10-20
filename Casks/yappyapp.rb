@@ -1,28 +1,46 @@
+# Canonical cask for migueltorrezd/homebrew-tap (Casks/yappyapp.rb).
+# scripts/publish_release.sh fills version and sha256 from the final DMG and
+# copies this file into the tap and into matd97-bridge/Casks/. Edit here, not
+# in the tap.
 cask "yappyapp" do
-  version "0.3.1"
-  sha256 "183902875c68b7c6fb629a68693600911392bb83bf4a28154260e3d84402ae9c"
+  version "0.4.0"
+  sha256 "20aa46cec7377f6b9f33a8f023b730b2cc0bba2cb9eb37294e7308f135e17c4b"
 
   url "https://github.com/migueltorrezd/yappyapp-releases/releases/download/v#{version}/YappYapp-#{version}.dmg"
   name "YappYapp"
-  desc "Local-only Mac dictation app with on-device Whisper and Parakeet transcription"
-  homepage "https://yappyapp.app"
-
-  depends_on macos: ">= :sonoma"
+  desc "Local-only dictation with on-device Whisper and Parakeet transcription"
+  homepage "https://yappyapp.app/"
 
   auto_updates true
+  depends_on arch: :arm64
+  depends_on macos: :sonoma
 
   app "YappYapp.app"
 
+  uninstall quit: "app.yappyapp.YappYapp"
+
+  zap script: {
+        executable: "/usr/bin/tccutil",
+        args:       ["reset", "All", "app.yappyapp.YappYapp"],
+      },
+      trash:  [
+        "~/Library/Application Support/YappYapp",
+        "~/Library/Application Support/YappYappLegacy",
+        "~/Library/Caches/app.yappyapp.YappYapp",
+        "~/Library/HTTPStorages/app.yappyapp.YappYapp",
+        "~/Library/Preferences/app.yappyapp.YappYapp.plist",
+        "~/Library/Saved Application State/app.yappyapp.YappYapp.savedState",
+      ]
+
   caveats <<~EOS
-    YappYapp is not notarized yet, so macOS Gatekeeper will block the first launch.
+    YappYapp needs an Apple Silicon Mac.
 
-    To open it the first time:
-      macOS 15 or newer: double-click YappYapp, then go to
-        System Settings -> Privacy & Security and click "Open Anyway".
-      macOS 14: right-click YappYapp in Applications and choose "Open".
+    Updating from 0.3.x? The app's signature changed in 0.4.0, so macOS asks
+    for Accessibility and Microphone access once more: turn YappYapp on again
+    in System Settings -> Privacy & Security -> Accessibility, and in
+    System Settings -> Privacy & Security -> Microphone.
 
-    To skip that prompt entirely, run this after installing
-    (recent Homebrew versions no longer offer a no-quarantine flag):
-      xattr -dr com.apple.quarantine /Applications/YappYapp.app
+    Moving from the old tap? Run once:
+      brew untap matd97/tap
   EOS
 end
